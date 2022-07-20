@@ -1,0 +1,99 @@
+{ config, pkgs, ... }:
+
+{
+  # Home Manager needs a bit of information about you and the
+  # paths it should manage.
+  home.username = "__USERNAME__";
+  home.homeDirectory = "/home/__USERNAME__";
+
+  # This value determines the Home Manager release that your
+  # configuration is compatible with. This helps avoid breakage
+  # when a new Home Manager release introduces backwards
+  # incompatible changes.
+  #
+  # You can update Home Manager without changing this value. See
+  # the Home Manager release notes for a list of state version
+  # changes in each release.
+  home.stateVersion = "22.05";
+
+  # Let Home Manager install and manage itself.
+  programs.home-manager.enable = true;
+
+  # Put all packages in here
+  home.packages = with pkgs; [
+    # Build systems
+    # =============
+    # Rust
+    rustup
+
+    # Git!
+    # =============
+    gitAndTools.gitFull
+    git-branchless
+    git-lfs
+    pre-commit
+
+    # Cli stuff
+    # ========
+    starship
+    bat
+    lsd
+    ncdu
+    ripgrep
+    fd
+    direnv
+    nix-direnv
+    tealdeer
+    wget
+    nushell
+    zsh
+  ];
+
+  programs.starship = {
+    enable = true;
+    # Configuration written to ~/.config/starship.toml
+    settings = {
+      # add_newline = false;
+
+      # character = {
+      #   success_symbol = "[➜](bold green)";
+      #   error_symbol = "[➜](bold red)";
+      # };
+
+      # package.disabled = true;
+    };
+  };
+  programs.zsh = {
+    enable = true;
+    shellAliases = {
+      ls = "lsd";
+      cat = "bat";
+      refresh = "darwin-rebuild switch";
+
+      # Git aliases
+      # Standard git
+      gs = "git-branchless wrap -- status";
+      gp = "git-branchless wrap -- push";
+      gpf = "git-branchless wrap -- push --force-with-lease";
+      # Git-branchless
+      gsync = "git-branchless sync";
+      gbinit = "git-branchless init";
+      gsl = "git sl";
+      gamend = "git-branchless amend";
+      greword = "git-branchless reword";
+
+      # Rust
+      clippy =
+        "cargo clippy --locked --all-features --tests --benches -- -D warnings -D clippy::all -D clippy::mem_forget -A clippy::redundant_closure -A clippy::too_many_arguments -C debug-assertions=off";
+    };
+    initExtra = ''
+      PATH=$HOME/.cargo/bin:$PATH
+              autoload -Uz compinit && compinit'';
+  };
+  programs.direnv = {
+    enable = true;
+    nix-direnv.enable = true;
+  };
+
+  nixpkgs.config.allowUnfree = true;
+}
