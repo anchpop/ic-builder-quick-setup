@@ -68,7 +68,7 @@
     shellAliases = {
       ls = "lsd";
       cat = "bat";
-      refresh = "darwin-rebuild switch";
+      refresh = "home-manager switch";
 
       # Git aliases
       # Standard git
