@@ -25,6 +25,8 @@
     # =============
     # Rust
     rustup
+    bazelisk
+    bazel-buildtools
 
     # Git!
     # =============
@@ -38,15 +40,14 @@
     starship
     bat
     lsd
-    ncdu
+    zsh
     ripgrep
     fd
-    direnv
-    nix-direnv
     tealdeer
     wget
-    nushell
-    zsh
+    asciinema
+    broot
+    jq
   ];
 
   programs.starship = {
@@ -72,19 +73,24 @@
 
       # Git aliases
       # Standard git
-      gs = "git-branchless wrap -- status";
+      gstat = "git-branchless wrap -- status";
       gp = "git-branchless wrap -- push";
       gpf = "git-branchless wrap -- push --force-with-lease";
       # Git-branchless
       gsync = "git-branchless sync";
       gbinit = "git-branchless init";
       gsl = "git sl";
-      gamend = "git-branchless amend";
+      gamend = "git-branchless amend -m";
       greword = "git-branchless reword";
+      gs = "git-branchless wrap -- switch";
+      gdp = "git difftool HEAD~1";
 
       # Rust
       clippy =
         "cargo clippy --locked --all-features --tests --benches -- -D warnings -D clippy::all -D clippy::mem_forget -A clippy::redundant_closure -A clippy::too_many_arguments -C debug-assertions=off";
+      
+      # bazel
+      bazel = "bazelisk";
     };
     initExtra = ''
       PATH=$HOME/.cargo/bin:$PATH
