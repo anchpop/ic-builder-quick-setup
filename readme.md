@@ -23,3 +23,9 @@ cd ic-builder-quick-setup
 1. Sets up precommit in `ic`
 
 1. Adds some aliases to `zsh`, like `clippy` to run the same command that's run on the CI, and `gpf` for `git push --force-with-lease` (which you should almost always use over `git push --force`). 
+
+## TODO
+
+- install dfx
+
+- add ~/bin to path
