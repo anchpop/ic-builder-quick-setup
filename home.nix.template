@@ -92,9 +92,31 @@
       # bazel
       bazel = "bazelisk";
     };
+    enableCompletion = true;
+    enableAutosuggestions = true;
     initExtra = ''
-      PATH=$HOME/.cargo/bin:$PATH
-              autoload -Uz compinit && compinit'';
+      export PATH=$HOME/.cargo/bin:/opt/homebrew/bin:$PATH
+      autoload -Uz compinit && compinit
+
+      protogen() {
+        (
+          set -x
+          # Gets the absolute path of the current directory
+          CURRENT_DIR=$(pwd)
+
+          # Checks if the current directory starts with the base path
+          if [[ $CURRENT_DIR == $HOME/*/ic/rs* ]]; then
+              # If so, extracts the relative path after the base path
+              RELATIVE_DIR=''${CURRENT_DIR#$HOME/*/ic/rs/}
+
+              # Runs the Bazel command with the relative path
+              bazelisk run //rs/$RELATIVE_DIR/protobuf_generator:protobuf_generator
+          else
+              echo "Error: must be in a directory under $HOME/*/ic/rs"
+          fi
+        )
+      }
+      '';
   };
   programs.direnv = {
     enable = true;
